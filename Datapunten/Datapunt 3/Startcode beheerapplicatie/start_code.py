@@ -3,6 +3,9 @@ from tkinter_wrapper import Scherm
 
 # database aanmaken. 
 db = Database(host="localhost", gebruiker="user", wachtwoord="password", database="attractiepark_software")
+db.connect()
+
+print()
 
 # scherm aanmaken. Je mag de grootte van het scherm aanpassen.
 scherm = Scherm("Attractie beheer", 1200, 800)
@@ -24,9 +27,10 @@ attributen_attractie = [
 ]
 
 def attracties_ophalen():
-   # vervang de voorbeeld data, door data uit de database.
-   return [(4, 'Familieboottocht', 'Water', None, None, None , None, 1, 20, 15, 1),
-           (5, 'Ruimtesimulator', 'Simulator', 100, 200, 12, 200, 1, 35, 10, 1)]
+    
+    Nameresults = db.execute_query('SELECT id, naam, type, overdekt, geschatte_wachttijd, doorlooptijd, actief, attractie_min_lengte, attractie_max_lengte, attractie_min_leeftijd, attractie_max_gewicht FROM voorziening WHERE NOT type = "horeca" AND NOT type = "winkel" LIMIT 1 ;')
+    # vervang de voorbeeld data, door data uit de database.
+    return Nameresults
 
 def voorziening_bewerken(bewerkte_voorziening, rij_index):
     print(f"Gewijzigde voorziening: {bewerkte_voorziening}")
