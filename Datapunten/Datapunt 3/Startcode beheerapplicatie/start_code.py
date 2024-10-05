@@ -26,11 +26,33 @@ attributen_attractie = [
     {"naam": "Actief", "type": "boolean","verplicht": True},
 ]
 
+attributen_horeca = [
+     {"naam": "Id",  "type": "int", "read-only": True},
+    {"naam": "Naam", "type": "string", "verplicht": True},
+    {"naam": "Type", "type": "options", "opties": ["Horeca", "Winkel"], "verplicht": True},
+    {"naam": "Overdekt", "type": "boolean", "verplicht": True},
+    {"naam": "Gem. wachttijd", "type": "int","verplicht": True},
+    {"naam": "Doorlooptijd", "type": "int", "verplicht": True},
+    {"naam": "Actief", "type": "boolean","verplicht": True},
+    {"naam": "Productaanbod", "type": "string", "verplicht": True}
+
+]
+
+
+
 def attracties_ophalen():
     
-    Nameresults = db.execute_query('SELECT id, naam, type, overdekt, geschatte_wachttijd, doorlooptijd, actief, attractie_min_lengte, attractie_max_lengte, attractie_min_leeftijd, attractie_max_gewicht FROM voorziening WHERE NOT type = "horeca" AND NOT type = "winkel" LIMIT 1 ;')
+    Attractieresults = db.execute_query('SELECT id, naam, type, overdekt, geschatte_wachttijd, doorlooptijd, actief, attractie_min_lengte, attractie_max_lengte, attractie_min_leeftijd, attractie_max_gewicht FROM voorziening WHERE NOT type = "horeca" AND NOT type = "winkel" ;')
     # vervang de voorbeeld data, door data uit de database.
-    return Nameresults
+    return Attractieresults
+
+def horeca_ophalen():
+
+    Horecaresults = db.execute_query('SELECT id, naam, type, overdekt, geschatte_wachttijd, doorlooptijd, actief, productaanbod FROM voorziening WHERE type = "horeca" OR type = "winkel" ORDER BY type = "horeca"')
+    return Horecaresults
+
+
+
 
 def voorziening_bewerken(bewerkte_voorziening, rij_index):
     print(f"Gewijzigde voorziening: {bewerkte_voorziening}")
@@ -42,9 +64,14 @@ def voorziening_verwijderen(verwijderde_voorziening, rij_index):
 
 # attracties ophalen
 attracties = attracties_ophalen()
+horeca_gelegenheden = horeca_ophalen()
 
 # tabel aan het scherm toevoegen. Je mag de titel en locatie van de tabel aanpassen.
 attractie_tabel = scherm.voeg_tabel_toe("Attracties", attributen_attractie, attracties, 0, 0, 1000, 300, voorziening_bewerken, voorziening_verwijderen)
+
+horeca_tabel = scherm.voeg_tabel_toe("Winkels en Horeca", attributen_horeca , horeca_gelegenheden , 0, 350, 1000, 300, voorziening_bewerken, voorziening_verwijderen)
+
+
 
 scherm.open()
     
