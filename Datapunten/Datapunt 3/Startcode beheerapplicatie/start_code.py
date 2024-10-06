@@ -57,7 +57,7 @@ def horeca_ophalen():
 
 
 def voorziening_bewerken(bewerkte_voorziening,):
-     if "productaanbod" in bewerkte_voorziening:
+     if "Productaanbod" in bewerkte_voorziening:
         bewerk_query_horeca = """
         UPDATE voorziening 
         SET 
@@ -133,14 +133,21 @@ def voorziening_verwijderen(verwijderde_voorziening, rij_index):
 
         db.execute_query("DELETE FROM voorziening WHERE id = %s", (verwijderde_voorziening["Id"],))
         scherm.toon_informatie_bericht("Let op!", "Voorziening is verwijderd.")
-      
+    
 
         print(f"Verwijderde voorziening: {verwijderde_voorziening}")
+        scherm.herlaad_tabel(attractie_tabel,attracties_ophalen())
+        scherm.herlaad_tabel(horeca_tabel, horeca_ophalen())
     
     else:
        scherm.toon_informatie_bericht("Let op!", "Voorziening niet verwijderd.")
        print("Niks is gewijzigd")
 
+
+#def Toevoegen_voorziening(Toegevoegde_voorziening,):
+   
+   
+   
 
 
       
@@ -159,6 +166,8 @@ horeca_gelegenheden = horeca_ophalen()
 attractie_tabel = scherm.voeg_tabel_toe("Attracties", attributen_attractie, attracties, 0, 0, 1000, 300, voorziening_bewerken, voorziening_verwijderen )
 
 horeca_tabel = scherm.voeg_tabel_toe("Winkels en Horeca", attributen_horeca , horeca_gelegenheden , 0, 350, 1000, 300, voorziening_bewerken, voorziening_verwijderen)
+
+#toevoeg knopjes
 
 scherm.voeg_nieuwe_voorziening_knop_toe("Toevoegen attractie", 1050, 50, attributen_attractie, opslaan_callback=None)
 
