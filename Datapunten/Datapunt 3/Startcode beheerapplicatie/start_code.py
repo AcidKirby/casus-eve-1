@@ -3,9 +3,7 @@ from tkinter_wrapper import Scherm
 
 # database aanmaken. 
 db = Database(host="localhost", gebruiker="user", wachtwoord="password", database="attractiepark_software")
-db.connect()
 
-print()
 
 # scherm aanmaken. Je mag de grootte van het scherm aanpassen.
 scherm = Scherm("Attractie beheer", 1250, 800)
@@ -21,7 +19,7 @@ attributen_attractie = [
     {"naam": "Minimale leeftijd", "type": "int"},
     {"naam": "Maximale gewicht", "type": "int"},
     {"naam": "Overdekt", "type": "boolean", "verplicht": True},
-    {"naam": "Gem. wachttijd", "type": "int","verplicht": True},
+    {"naam": "Gem. wachttijd", "type": "int","verplicht": False},
     {"naam": "Doorlooptijd", "type": "int", "verplicht": True},
     {"naam": "Actief", "type": "boolean","verplicht": True},
 ]
@@ -41,16 +39,20 @@ attributen_horeca = [
 
 
 def attracties_ophalen():
-    
+    db.connect()
+
+
     Attractieresults = db.execute_query('SELECT id, naam, type, overdekt, geschatte_wachttijd, doorlooptijd, actief, attractie_min_lengte, attractie_max_lengte, attractie_min_leeftijd, attractie_max_gewicht FROM voorziening WHERE NOT type = "horeca" AND NOT type = "winkel" ;')
     # vervang de voorbeeld data, door data uit de database.
     return Attractieresults
+
 
 def horeca_ophalen():
 
     Horecaresults = db.execute_query('SELECT id, naam, type, overdekt, geschatte_wachttijd, doorlooptijd, actief, productaanbod FROM voorziening WHERE type = "horeca" OR type = "winkel" ORDER BY type = "horeca"')
     return Horecaresults
 
+db.close()
 
 
 
@@ -91,7 +93,25 @@ def voorziening_bewerken(bewerkte_voorziening, rij_index):
     
    
 def voorziening_verwijderen(verwijderde_voorziening, rij_index):
-    print(f"Verwijderde voorziening: {verwijderde_voorziening}")
+
+    antwoord =  scherm.toon_vraag_ja_nee_venster("Voorziening Verwijderen", "Weet je zeker?")
+
+    if antwoord == True :
+
+        db.execute_query("DELETE FROM voorziening WHERE id = %s", (verwijderde_voorziening["Id"],))
+        scherm.toon_informatie_bericht("Let op!", "Voorziening is verwijderd.")
+      
+
+        print(f"Verwijderde voorziening: {verwijderde_voorziening}")
+    
+    else:
+       scherm.toon_informatie_bericht("Let op!", "Voorziening niet verwijderd.")
+       print("Niks is gewijzigd")
+       
+
+      
+    
+    
 
    
 
