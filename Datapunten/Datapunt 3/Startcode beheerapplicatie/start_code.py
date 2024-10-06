@@ -8,7 +8,7 @@ db.connect()
 print()
 
 # scherm aanmaken. Je mag de grootte van het scherm aanpassen.
-scherm = Scherm("Attractie beheer", 1200, 800)
+scherm = Scherm("Attractie beheer", 1250, 800)
 
 # attributen van een attractie
 # deze attributen worden gebruikt om de tabel te maken en de juiste types mee te geven bij het bewerken scherm.
@@ -104,7 +104,11 @@ horeca_gelegenheden = horeca_ophalen()
 # tabel aan het scherm toevoegen. Je mag de titel en locatie van de tabel aanpassen.
 attractie_tabel = scherm.voeg_tabel_toe("Attracties", attributen_attractie, attracties, 0, 0, 1000, 300, voorziening_bewerken, voorziening_verwijderen )
 
-horeca_tabel = scherm.voeg_tabel_toe("Winkels en Horeca", attributen_horeca , horeca_gelegenheden , 0, 350, 1000, 300, voorziening_bewerken,)
+horeca_tabel = scherm.voeg_tabel_toe("Winkels en Horeca", attributen_horeca , horeca_gelegenheden , 0, 350, 1000, 300, voorziening_bewerken, voorziening_verwijderen)
+
+scherm.voeg_nieuwe_voorziening_knop_toe("Toevoegen attractie", 1050, 50, attributen_attractie, opslaan_callback=None)
+
+scherm.voeg_nieuwe_voorziening_knop_toe("Toevoegen winkel en of horeca", 1030, 400, attributen_horeca, opslaan_callback=None)
 
 
 
