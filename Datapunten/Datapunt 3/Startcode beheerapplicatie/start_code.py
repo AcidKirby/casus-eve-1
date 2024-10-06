@@ -15,7 +15,7 @@ attributen_attractie = [
     {"naam": "Naam", "type": "string", "verplicht": True},
     {"naam": "Type", "type": "options", "opties": ["Achtbaan", "Water", "Draaien", "Familie", "Simulator"], "verplicht": True},
     {"naam": "Overdekt", "type": "boolean", "verplicht": True},
-    {"naam": "Gem. wachttijd", "type": "int","verplicht": False},
+    {"naam": "Gem. wachttijd", "type": "int","verplicht": True},
     {"naam": "Doorlooptijd", "type": "int", "verplicht": True},
     {"naam": "Actief", "type": "boolean","verplicht": True},
     {"naam": "Minimale lengte", "type": "float"},
@@ -56,8 +56,8 @@ def horeca_ophalen():
 
 
 
-def voorziening_bewerken(bewerkte_voorziening,):
-     if "Productaanbod" in bewerkte_voorziening:
+def voorziening_bewerken(Toegevoegde_voorziening,):
+     if "Productaanbod" in Toegevoegde_voorziening:
         bewerk_query_horeca = """
         UPDATE voorziening 
         SET 
@@ -72,14 +72,14 @@ def voorziening_bewerken(bewerkte_voorziening,):
         id = %s
         """
         params = (
-            bewerkte_voorziening["Naam"],  # naam is a string
-            bewerkte_voorziening["Type"],  # type is a string
-            1 if bewerkte_voorziening["Overdekt"] else 0,  # overdekt is stored as 1 or 0 (tinyint)
-            bewerkte_voorziening["Gem. wachttijd"],  # wachttijd should be an integer
-            bewerkte_voorziening["Doorlooptijd"],  # doorlooptijd should be an integer
-            1 if bewerkte_voorziening["Actief"] else 0,  # actief is stored as 1 or 0 (tinyint)
-            bewerkte_voorziening["Productaanbod"],
-            bewerkte_voorziening["Id"],
+            Toegevoegde_voorziening["Naam"],  
+            Toegevoegde_voorziening["Type"],  
+            1 if Toegevoegde_voorziening["Overdekt"] else 0,  
+            Toegevoegde_voorziening["Gem. wachttijd"],  
+            Toegevoegde_voorziening["Doorlooptijd"],  
+            1 if Toegevoegde_voorziening["Actief"] else 0,  
+            Toegevoegde_voorziening["Productaanbod"],
+            Toegevoegde_voorziening["Id"],
         )
  
         db.execute_query(bewerk_query_horeca, params)
@@ -104,24 +104,24 @@ def voorziening_bewerken(bewerkte_voorziening,):
         """
 
         params = (
-            bewerkte_voorziening["Naam"],  # naam is a string
-            bewerkte_voorziening["Type"],  # type is a string
-            1 if bewerkte_voorziening["Overdekt"] else 0,  # overdekt is stored as 1 or 0 (tinyint)
-            bewerkte_voorziening["Gem. wachttijd"],  # wachttijd should be an integer
-            bewerkte_voorziening["Doorlooptijd"],  # doorlooptijd should be an integer
-            1 if bewerkte_voorziening["Actief"] else 0,  # actief is stored as 1 or 0 (tinyint)
-            bewerkte_voorziening["Minimale lengte"],
-            bewerkte_voorziening["Maximale lengte"],
-            bewerkte_voorziening["Maximale lengte"],
-            bewerkte_voorziening["Maximale gewicht"],
-            bewerkte_voorziening["Id"],
+            Toegevoegde_voorziening["Naam"],  
+            Toegevoegde_voorziening["Type"],  
+            1 if Toegevoegde_voorziening["Overdekt"] else 0,  
+            Toegevoegde_voorziening["Gem. wachttijd"],  
+            Toegevoegde_voorziening["Doorlooptijd"],  
+            1 if Toegevoegde_voorziening["Actief"] else 0,  
+            Toegevoegde_voorziening["Minimale lengte"],
+            Toegevoegde_voorziening["Maximale lengte"],
+            Toegevoegde_voorziening["Maximale lengte"],
+            Toegevoegde_voorziening["Maximale gewicht"],
+            Toegevoegde_voorziening["Id"],
         )
  
         db.execute_query(bewerk_query_attractie, params)
  
         scherm.herlaad_tabel(attractie_tabel,attracties_ophalen())
         scherm.herlaad_tabel(horeca_tabel, horeca_ophalen())
-        print(f"Gewijzigde voorziening: {bewerkte_voorziening}")
+        print(f"Gewijzigde voorziening: {Toegevoegde_voorziening}")
 
     
    
@@ -144,7 +144,51 @@ def voorziening_verwijderen(verwijderde_voorziening, rij_index):
        print("Niks is gewijzigd")
 
 
-#def Toevoegen_voorziening(Toegevoegde_voorziening,):
+def Toevoegen_voorziening(Toegevoegde_voorziening,):
+    if "Productaanbod" in Toegevoegde_voorziening:
+        bewerk_query_horeca = """
+        INSERT INTO voorziening (naam, type, overdekt, geschatte_wachttijd, doorlooptijd, actief, productaanbod)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
+        
+        """
+        params = (
+            Toegevoegde_voorziening["Naam"],  
+            Toegevoegde_voorziening["Type"],  
+            1 if Toegevoegde_voorziening["Overdekt"] else 0,  
+            Toegevoegde_voorziening["Gem. wachttijd"],  
+            Toegevoegde_voorziening["Doorlooptijd"],  
+            1 if Toegevoegde_voorziening["Actief"] else 0,  
+            Toegevoegde_voorziening["Productaanbod"],
+        )
+ 
+        db.execute_query(bewerk_query_horeca, params)
+        scherm.herlaad_tabel(horeca_tabel, horeca_ophalen())
+    
+    else:
+        bewerk_query_attractie = """
+        INSERT INTO voorziening (naam, type, overdekt, geschatte_wachttijd, doorlooptijd, actief, attractie_min_lengte, attractie_max_lengte, attractie_min_leeftijd, attractie_max_gewicht)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        
+        """
+
+        params = (
+            Toegevoegde_voorziening["Naam"],  
+            Toegevoegde_voorziening["Type"],  
+            1 if Toegevoegde_voorziening["Overdekt"] else 0,  
+            Toegevoegde_voorziening["Gem. wachttijd"],  
+            Toegevoegde_voorziening["Doorlooptijd"],  
+            1 if Toegevoegde_voorziening["Actief"] else 0,  
+            Toegevoegde_voorziening["Minimale lengte"],
+            Toegevoegde_voorziening["Maximale lengte"],
+            Toegevoegde_voorziening["Maximale lengte"],
+            Toegevoegde_voorziening["Maximale gewicht"],
+        )
+ 
+        db.execute_query(bewerk_query_attractie, params)
+ 
+        scherm.herlaad_tabel(attractie_tabel,attracties_ophalen())
+        scherm.herlaad_tabel(horeca_tabel, horeca_ophalen())
+        print(f"toegevoegde voorziening: {Toegevoegde_voorziening}")
    
    
    
@@ -153,10 +197,6 @@ def voorziening_verwijderen(verwijderde_voorziening, rij_index):
       
     
     
-
-   
-
-
 
 # attracties ophalen
 attracties = attracties_ophalen()
@@ -169,9 +209,9 @@ horeca_tabel = scherm.voeg_tabel_toe("Winkels en Horeca", attributen_horeca , ho
 
 #toevoeg knopjes
 
-scherm.voeg_nieuwe_voorziening_knop_toe("Toevoegen attractie", 1050, 50, attributen_attractie, opslaan_callback=None)
+scherm.voeg_nieuwe_voorziening_knop_toe("Toevoegen attractie", 1050, 50, attributen_attractie, opslaan_callback=Toevoegen_voorziening)
 
-scherm.voeg_nieuwe_voorziening_knop_toe("Toevoegen winkel en of horeca", 1030, 400, attributen_horeca, opslaan_callback=None)
+scherm.voeg_nieuwe_voorziening_knop_toe("Toevoegen winkel en of horeca", 1030, 400, attributen_horeca, opslaan_callback=Toevoegen_voorziening)
 
 
 
