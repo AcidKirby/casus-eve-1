@@ -55,11 +55,46 @@ def horeca_ophalen():
 
 
 def voorziening_bewerken(bewerkte_voorziening, rij_index):
-    print(f"Gewijzigde voorziening: {bewerkte_voorziening}")
+ """
+     UPDATE voorziening 
+     SET 
+     naam = %s, 
+     type = %s, 
+     overdekt = %s, 
+      geschatte_wachttijd = %s, 
+       doorlooptijd = %s, 
+      actief = %s, 
+      attractie_min_lengte = %s, 
+     attractie_max_lengte = %s, 
+      attractie_min_leeftijd = %s, 
+      attractie_max_gewicht = %s, 
+       productaanbod = %s 
+     WHERE 
+     id = %s
+      """
+
+ params = (
+    bewerkte_voorziening[1],  # naam is a string
+    bewerkte_voorziening[2],  # type is a string
+    1 if bewerkte_voorziening[7].lower() == "ja" else 0,  # overdekt is stored as 1 or 0 (tinyint)
+    bewerkte_voorziening[8],  # wachttijd should be an integer
+    bewerkte_voorziening[9],  # doorlooptijd should be an integer
+    1 if bewerkte_voorziening[10].lower() == "ja" else 0,  # actief is stored as 1 or 0 (tinyint)
+    bewerkte_voorziening[3],
+    bewerkte_voorziening[4],
+    bewerkte_voorziening[5],
+    bewerkte_voorziening[6],
+    bewerkte_voorziening[11],
+    bewerkte_voorziening[0],
+            )
+ print(f"Gewijzigde voorziening: {bewerkte_voorziening}")
     
    
 def voorziening_verwijderen(verwijderde_voorziening, rij_index):
     print(f"Verwijderde voorziening: {verwijderde_voorziening}")
+
+   
+
 
 
 # attracties ophalen
@@ -67,9 +102,9 @@ attracties = attracties_ophalen()
 horeca_gelegenheden = horeca_ophalen()
 
 # tabel aan het scherm toevoegen. Je mag de titel en locatie van de tabel aanpassen.
-attractie_tabel = scherm.voeg_tabel_toe("Attracties", attributen_attractie, attracties, 0, 0, 1000, 300, voorziening_bewerken, voorziening_verwijderen)
+attractie_tabel = scherm.voeg_tabel_toe("Attracties", attributen_attractie, attracties, 0, 0, 1000, 300, voorziening_bewerken, voorziening_verwijderen )
 
-horeca_tabel = scherm.voeg_tabel_toe("Winkels en Horeca", attributen_horeca , horeca_gelegenheden , 0, 350, 1000, 300, voorziening_bewerken, voorziening_verwijderen)
+horeca_tabel = scherm.voeg_tabel_toe("Winkels en Horeca", attributen_horeca , horeca_gelegenheden , 0, 350, 1000, 300, voorziening_bewerken,)
 
 
 

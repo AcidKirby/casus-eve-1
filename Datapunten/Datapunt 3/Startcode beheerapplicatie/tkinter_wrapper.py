@@ -117,6 +117,7 @@ class Scherm:
             actie_button = tk.Button(dialoog_window, text="Toevoegen", command=lambda: self.attractie_opslaan(dialoog_window, voorziening_attributen, variabelen, toevoeg_callback))
         actie_button.grid(row=len(voorziening_attributen), column=0, columnspan=2, padx=5, pady=5,sticky=tk.E+tk.W)
         
+        
         # Annuleerknop
         annuleren_button = tk.Button(dialoog_window, text="Annuleren", command=dialoog_window.destroy)
         annuleren_button.grid(row=len(voorziening_attributen), column=2, columnspan=2, padx=5, pady=5, sticky=tk.E+tk.W)
