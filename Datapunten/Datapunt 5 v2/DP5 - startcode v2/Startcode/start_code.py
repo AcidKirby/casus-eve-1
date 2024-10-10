@@ -6,7 +6,7 @@ def overzicht_attracties():
     # altijd verbinding openen om query's uit te voeren
     db.connect()
 
-    select_query = "SELECT type FROM voorziening"
+    select_query = "SELECT naam, type FROM voorziening"
     results = db.execute_query(select_query)
 
     # altijd verbinding sluiten met de database als je klaar bent
@@ -57,6 +57,8 @@ for voorkeuren in list_met_voorzieningen :
         continue
     print(voorkeuren, "Zelfde type")
 
+  
+
     
 
 
@@ -64,11 +66,50 @@ for voorkeuren in list_met_voorzieningen :
 
 dagprogramma = {
     "voorkeuren": {
-      "naam" : json_dict["naam"]
-        
-    }
+      "naam" : json_dict["naam"],
+      "gender" : json_dict["gender"],
+      "leeftijd" : json_dict["leeftijd"],
+      "voorkeuren eten" : json_dict["voorkeuren_eten"],
+      "voorkeuren type attracties" : json_dict["voorkeuren_attractietypes"],
+      "lievelings attracties" : json_dict["lievelings_attracties"],
+      "verblijfsduur" : json_dict ["verblijfsduur"]
+
+
+
+    },
+    "voorzieningen": [
+        {
+            "naam": "Roller Coaster",
+            "type": "Thrill Ride",
+            "geschatte_wachttijd": 30,
+            "doorlooptijd": 5,
+            "attractie_min_lengte": 120,
+            "attractie_max_lengte": None,
+            "attractie_min_leeftijd": 10,
+            "attractie_max_gewicht": None
+        },
+        {
+            "naam": "Ferris Wheel",
+            "type": "Family Ride",
+            "geschatte_wachttijd": 15,
+            "doorlooptijd": 10,
+            "attractie_min_lengte": None,
+            "attractie_max_lengte": None,
+            "attractie_min_leeftijd": 5,
+            "attractie_max_gewicht": None
+        }
+    ]
 }
 
+'''
+dagprogramma = {
+    "voorziening" : {
+        "voorziening naam" : list_met_voorzieningen["naam"]
+
+
+    }
+}
+'''
 # uiteindelijk schrijven we de dictionary weg naar een JSON-bestand
 with open('persoonlijk_programma_bezoeker_x.json', 'w') as json_bestand:
     json.dump(dagprogramma, json_bestand)
