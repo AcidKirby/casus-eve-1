@@ -6,7 +6,7 @@ def overzicht_attracties():
     # altijd verbinding openen om query's uit te voeren
     db.connect()
 
-    select_query = "SELECT naam, type FROM voorziening"
+    select_query = "SELECT naam, type, geschatte_wachttijd, doorlooptijd, attractie_min_lengte, attractie_max_lengte, attractie_min_leeftijd, attractie_max_gewicht FROM voorziening"
     results = db.execute_query(select_query)
 
     # altijd verbinding sluiten met de database als je klaar bent
@@ -79,14 +79,14 @@ dagprogramma = {
     },
     "voorzieningen": [
         {
-            "naam": "Roller Coaster",
-            "type": "Thrill Ride",
-            "geschatte_wachttijd": 30,
-            "doorlooptijd": 5,
-            "attractie_min_lengte": 120,
-            "attractie_max_lengte": None,
-            "attractie_min_leeftijd": 10,
-            "attractie_max_gewicht": None
+            "naam": voorkeuren["naam"],
+            "type": voorkeuren["type"],
+            "geschatte_wachttijd": voorkeuren["geschatte_wachttijd"],
+            "doorlooptijd": voorkeuren["doorlooptijd"],
+            "attractie_min_lengte": voorkeuren["attractie_min_lengte"],
+            "attractie_max_lengte":  voorkeuren["attractie_max_lengte"],
+            "attractie_min_leeftijd": voorkeuren["attractie_min_leeftijd"],
+            "attractie_max_gewicht":  voorkeuren["attractie_max_gewicht"]
         },
         {
             "naam": "Ferris Wheel",
