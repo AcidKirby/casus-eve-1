@@ -18,7 +18,7 @@ def overzicht_attracties():
 db = Database(host="localhost", gebruiker="user", wachtwoord="password", database="attractiepark_software")
 
 # navigeer naar het JSON-bestand, let op: er zijn ook andere persoonlijke voorkeuren om te testen! en maak vooral ook je eigen persoonlijke voorkeuren :-)
-bestand_pad = Path(__file__).parent / 'persoonlijke_voorkeuren_bezoeker_3.json'
+bestand_pad = Path(__file__).parent / 'persoonlijke_voorkeuren_bezoeker_1.json'
 
 # open het JSON-bestand 
 json_bestand = open(bestand_pad)
@@ -34,8 +34,8 @@ typeattractievoorkeur = str(print(json_dict["voorkeuren_attractietypes"]))
 list_met_voorzieningen = overzicht_attracties()
 print()
 
-print("Eerste rij:")
-print(list_met_voorzieningen[0]["type"])
+#print("Eerste rij:")
+#print(list_met_voorzieningen[0]["type"])
 
 json_bestand.close() # sluit het bestand indien niet meer nodig
 
@@ -49,13 +49,41 @@ json_bestand.close() # sluit het bestand indien niet meer nodig
 
 voorkeuren = str("")
 
+gekozen_voorziening = []
+
+tijd_over = json_dict["verblijfsduur"]
+
 
 for voorkeuren in list_met_voorzieningen :
-    print(voorkeuren)
 
-    if voorkeuren == (typeattractievoorkeur.lower()) :
+    totale_tijd_nodig = voorkeuren["geschatte_wachttijd"] + voorkeuren["doorlooptijd"]
+   
+    if totale_tijd_nodig > tijd_over:
         continue
-    print(voorkeuren, "Zelfde type")
+    
+    if voorkeuren["attractie_min_lengte"] and json_dict["lengte"] < voorkeuren["attractie_min_lengte"]:
+        continue
+    if voorkeuren["attractie_max_lengte"] and json_dict["lengte"] > voorkeuren["attractie_max_lengte"]:
+        continue
+    if voorkeuren["attractie_min_leeftijd"] and json_dict["leeftijd"] < voorkeuren["attractie_min_leeftijd"]:
+        continue
+    if voorkeuren["attractie_max_gewicht"] and json_dict["gewicht"] > voorkeuren["attractie_max_gewicht"]:
+        continue
+
+    gekozen_voorziening.append(voorkeuren) 
+    tijd_over -= totale_tijd_nodig
+
+
+    
+    
+  
+        
+print(gekozen_voorziening)
+    
+ #   if (voorkeuren.lower()) == (typeattractievoorkeur.lower()) :
+ #       continue
+ #   print(voorkeuren, "Is de zelfde type")
+   
 
   
 
@@ -77,39 +105,15 @@ dagprogramma = {
 
 
     },
-    "voorzieningen": [
-        {
-            "naam": voorkeuren["naam"],
-            "type": voorkeuren["type"],
-            "geschatte_wachttijd": voorkeuren["geschatte_wachttijd"],
-            "doorlooptijd": voorkeuren["doorlooptijd"],
-            "attractie_min_lengte": voorkeuren["attractie_min_lengte"],
-            "attractie_max_lengte":  voorkeuren["attractie_max_lengte"],
-            "attractie_min_leeftijd": voorkeuren["attractie_min_leeftijd"],
-            "attractie_max_gewicht":  voorkeuren["attractie_max_gewicht"]
-        },
-        {
-            "naam": "Ferris Wheel",
-            "type": "Family Ride",
-            "geschatte_wachttijd": 15,
-            "doorlooptijd": 10,
-            "attractie_min_lengte": None,
-            "attractie_max_lengte": None,
-            "attractie_min_leeftijd": 5,
-            "attractie_max_gewicht": None
-        }
+     "voorzieningen": [
+        
+        
     ]
 }
 
-'''
-dagprogramma = {
-    "voorziening" : {
-        "voorziening naam" : list_met_voorzieningen["naam"]
+for gekozen_lijst in gekozen_voorziening :
+    dagprogramma["voorzieningen"].append(gekozen_lijst)
 
-
-    }
-}
-'''
 # uiteindelijk schrijven we de dictionary weg naar een JSON-bestand
 with open('persoonlijk_programma_bezoeker_x.json', 'w') as json_bestand:
     json.dump(dagprogramma, json_bestand)
